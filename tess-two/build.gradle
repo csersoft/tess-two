@@ -15,6 +15,12 @@ android {
         versionCode 1
         versionName '1.0'
         consumerProguardFiles 'proguard-rules.pro'
+
+        externalNativeBuild {
+            ndkBuild {
+                arguments '-j' + Runtime.runtime.availableProcessors()
+            }
+        }
     }
 
     sourceSets {
@@ -24,7 +30,29 @@ android {
             res.srcDirs = ['res']
         }
     }
-
+    buildTypes {
+        debug {
+            debuggable = true
+            jniDebuggable = true
+            externalNativeBuild {
+                ndkBuild {
+                    arguments "NDK_DEBUG=1"
+                }
+            }
+        }
+        release {
+            proguardFiles 'proguard-rules.pro'
+            externalNativeBuild {
+                ndkBuild {
+                    arguments "NDK_DEBUG=0"
+                }
+            }
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
     externalNativeBuild {
         ndkBuild {
             path "jni/Android.mk"
